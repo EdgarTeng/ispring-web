@@ -8,6 +8,8 @@ public interface ReservationService {
 	
 	public List<Reservation> query(String courtName);
 	
+	public List<Reservation> findByPlayerName(String name);
+	
 	public List<Reservation> list();
 
 }

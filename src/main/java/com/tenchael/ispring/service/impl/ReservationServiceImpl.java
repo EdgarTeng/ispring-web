@@ -31,7 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<Reservation> query(String courtName) {
 		List<Reservation> result = new ArrayList<Reservation>();
 		for (Reservation reservation : reservations) {
-			if (reservation.getCourtName().equals(courtName)) {
+			if (reservation.getCourtName().contains(courtName)) {
 				result.add(reservation);
 			}
 		}
@@ -40,6 +40,16 @@ public class ReservationServiceImpl implements ReservationService {
 
 	public List<Reservation> list() {
 		return reservations;
+	}
+
+	public List<Reservation> findByPlayerName(String name) {
+		List<Reservation> result = new ArrayList<Reservation>();
+		for (Reservation reservation : reservations) {
+			if (reservation.getPlayer().getName().contains(name)) {
+				result.add(reservation);
+			}
+		}
+		return result;
 	}
 
 }
