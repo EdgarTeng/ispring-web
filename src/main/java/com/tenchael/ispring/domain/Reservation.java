@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Reservation implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private Integer id;
 	private String courtName;
 	private Date date;
 	private Integer hour;
@@ -23,6 +24,14 @@ public class Reservation implements Serializable {
 		this.hour = hour;
 		this.player = player;
 		this.sportType = sportType;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getCourtName() {
