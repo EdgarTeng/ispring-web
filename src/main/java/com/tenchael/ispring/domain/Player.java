@@ -2,8 +2,9 @@ package com.tenchael.ispring.domain;
 
 import java.io.Serializable;
 
-public class Player implements Serializable{
+public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private Integer id;
 	private String name;
 	private String phone;
 
@@ -15,6 +16,14 @@ public class Player implements Serializable{
 		super();
 		this.name = name;
 		this.phone = phone;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
