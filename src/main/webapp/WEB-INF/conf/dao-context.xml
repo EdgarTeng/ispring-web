@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- This is where the data access objects (DAOs) are defined This app uses 
+		a data mapping framework called iBATIS. Each DAO extends the SqlMapClientDaoSupport 
+		class, and we pass in the sqlMapClient, we would like to use (defined in 
+		spring-data.xml) -->
+
+	<bean id="developerDAO" class="com.richardhoppes.example.dao.DeveloperDAO">
+		<property name="sqlMapClient" ref="readWriteSqlMapClient" />
+	</bean>
+
+</beans>
