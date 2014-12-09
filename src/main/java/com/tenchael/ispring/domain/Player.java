@@ -2,10 +2,31 @@ package com.tenchael.ispring.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+@Entity
+@Table(name = "T_Player")
 public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue
 	private Integer id;
+
+	@Column(name = "name")
+	@Size(min = 1, max = 30)
+	@NotNull
 	private String name;
+
+	@Column(name = "phone")
+	@Size(min = 7, max = 13)
 	private String phone;
 
 	public Player() {
@@ -40,6 +61,11 @@ public class Player implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	@Override
+	public String toString() {
+		return "id=" + id + ":name=" + name + ":phone=" + phone;
 	}
 
 }

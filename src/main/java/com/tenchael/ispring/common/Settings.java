@@ -8,7 +8,7 @@ public class Settings {
 
 	private Properties configProperties;
 
-	private String getProperty(String property) throws NotFoundException {
+	public String getProperty(final String property) throws NotFoundException {
 		String retVal = configProperties.getProperty(property);
 		if (retVal == null) {
 			throw new NotFoundException("Property not found: " + property);
@@ -20,29 +20,27 @@ public class Settings {
 		return getProperty("mode");
 	}
 
-	public String getJdbcReadWriteDriver() throws NotFoundException {
-		return getProperty("jdbc.readWrite.driver");
+	public String getJdbcDriver() throws NotFoundException {
+		return getProperty("jdbc.driver");
 	}
 
-	public String getJdbcReadWriteUrl() throws NotFoundException {
-		return getProperty("jdbc.readWrite.base.url") + "/"
-				+ getProperty("jdbc.readWrite.db") + "?"
-				+ getProperty("jdbc.readWrite.params");
+	public String getJdbcUrl() throws NotFoundException {
+		return getProperty("jdbc.url");
 	}
 
-	public String getJdbcReadWriteUser() throws NotFoundException {
-		return getProperty("jdbc.readWrite.user");
+	public String getJdbcUser() throws NotFoundException {
+		return getProperty("jdbc.user");
 	}
 
-	public String getJdbcReadWritePassword() throws NotFoundException {
-		return getProperty("jdbc.readWrite.password");
+	public String getJdbcPassword() throws NotFoundException {
+		return getProperty("jdbc.password");
 	}
 
 	public Properties getConfigProperties() {
 		return configProperties;
 	}
 
-	public void setConfigProperties(Properties configProperties) {
+	public void setConfigProperties(final Properties configProperties) {
 		this.configProperties = configProperties;
 	}
 }

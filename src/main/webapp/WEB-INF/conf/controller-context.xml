@@ -23,7 +23,8 @@
 	</bean>
 
 	<!-- Autodetect controller classes annotated with @Controller -->
-	<context:component-scan base-package="com.tenchael.ispring.web" />
+	<context:component-scan
+		base-package="com.tenchael.ispring.web,com.tenchael.ispring.rest" />
 
 	<!-- URL patterns for static resource requests -->
 	<mvc:resources mapping="/js/**" location="/WEB-INF/views/js/" />
