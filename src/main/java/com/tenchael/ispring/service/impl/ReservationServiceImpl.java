@@ -1,55 +1,80 @@
 package com.tenchael.ispring.service.impl;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
-import com.tenchael.ispring.domain.Player;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.tenchael.ispring.domain.Court;
 import com.tenchael.ispring.domain.Reservation;
 import com.tenchael.ispring.domain.SportType;
+import com.tenchael.ispring.repository.ReservationDao;
 import com.tenchael.ispring.service.ReservationService;
 
 @Service
+@Transactional(readOnly = true)
 public class ReservationServiceImpl implements ReservationService {
 
-	public static final SportType TENNIS = new SportType(1, "Tennis");
-	public static final SportType SOCCER = new SportType(2, "Soccer");
+	@Autowired
+	private ReservationDao reservationDao;
 
-	private List<Reservation> reservations = null;
-
-	public ReservationServiceImpl() {
-		reservations = new ArrayList<Reservation>();
-		reservations.add(new Reservation("Tennis #1", new GregorianCalendar(
-				2014, 12, 5).getTime(), 4, new Player("Alice", "13212123145"),
-				TENNIS));
-		reservations.add(new Reservation("Tennis #2", new GregorianCalendar(
-				2014, 12, 1).getTime(), 4, new Player("Ann", "N/A"), TENNIS));
+	public List<Reservation> findAll() {
+		return reservationDao.findAll();
 	}
 
-	public List<Reservation> query(String courtName) {
-		List<Reservation> result = new ArrayList<Reservation>();
-		for (Reservation reservation : reservations) {
-			if (reservation.getCourtName().contains(courtName)) {
-				result.add(reservation);
+	public Page<Reservation> findAll(Pageable page) {
+		return reservationDao.findAll(page);
+	}
+
+	public Reservation findById(Integer id) {
+		return reservationDao.findOne(id);
+	}
+
+	@Transactional(readOnly = false)
+	public Reservation save(Reservation entity) {
+		return reservationDao.save(entity);
+	}
+
+	@Transactional(readOnly = false)
+	public void delete(Integer id) {
+		reservationDao.delete(id);
+	}
+
+	public Page<Reservation> findBySportTpyeName(final String sportTypeName,
+			Pageable pageable) {
+		Specification<Reservation> spec = new Specification<Reservation>() {
+
+			public Predicate toPredicate(Root<Reservation> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				cb.like(root.<SportType> get("sportType").<String> get("name"),
+						sportTypeName);
+				return cb.conjunction();
 			}
-		}
-		return result;
+		};
+		return reservationDao.findAll(spec, pageable);
 	}
 
-	public List<Reservation> list() {
-		return reservations;
+	public List<Reservation> findByPlayerName(String playerName) {
+		//return reservationDao.findByPlayerName(playerName);
+		return null;
 	}
 
-	public List<Reservation> findByPlayerName(String name) {
-		List<Reservation> result = new ArrayList<Reservation>();
-		for (Reservation reservation : reservations) {
-			if (reservation.getPlayer().getName().contains(name)) {
-				result.add(reservation);
-			}
+	public Reservation findByCourt(Court court) {
+		/*List<Reservation> reservations = reservationDao.findByCourt(court);
+		if (null != reservations || reservations.isEmpty()) {
+			return null;
 		}
-		return result;
+		return reservations.get(0);*/
+		return null;
 	}
 
 }

@@ -1,11 +1,20 @@
 package com.tenchael.ispring.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +29,10 @@ public class PlayerServiceImpl implements PlayerService {
 	@Autowired
 	private PlayerDao playerDao;
 
+	public List<Player> findAll() {
+		return playerDao.findAll();
+	}
+
 	public Page<Player> findAll(int page, int size) {
 		Pageable pageable = new PageRequest(page, size, new Sort(
 				Direction.DESC, "id"));
@@ -27,32 +40,50 @@ public class PlayerServiceImpl implements PlayerService {
 		return players;
 	}
 
+	public Page<Player> findAll(Pageable page) {
+		return playerDao.findAll(page);
+	}
+
 	public Page<Player> findByNameLike(String name, int page, int size) {
 		Pageable pageable = new PageRequest(page, size, new Sort(
 				Direction.DESC, "id"));
 		String q = "%" + name + "%";
-		Page<Player> persons = playerDao.findByNameLike(q, pageable);
-		return persons;
+		//Page<Player> persons = playerDao.findByNameLike(q, pageable);
+		//return persons;
+		return null;
 	}
 
 	public Player findById(Integer id) {
 		return playerDao.findOne(id);
 	}
 
-	@Transactional(readOnly = false)
-	public Player insert(Player player) {
-		return playerDao.save(player);
+	public Page<Player> search(final String condition, Pageable page) {
+		Specification<Player> spec = new Specification<Player>() {
+			public Predicate toPredicate(Root<Player> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predictes = new ArrayList<Predicate>();
+				predictes.add(cb.like(root.<String> get("name"),
+						condition.trim()));
+				predictes.add(cb.like(root.<String> get("phone"),
+						condition.trim()));
+				if (predictes.size() > 0) {
+					return cb.or(predictes.toArray(new Predicate[predictes
+							.size()]));
+				}
+				return cb.conjunction();
+			}
+		};
+		return playerDao.findAll(spec, page);
 	}
 
 	@Transactional(readOnly = false)
-	public Player update(Player player) {
-		return playerDao.save(player);
+	public Player save(Player entity) {
+		return playerDao.save(entity);
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteById(Integer id) {
+	public void delete(Integer id) {
 		playerDao.delete(id);
-
 	}
 
 }

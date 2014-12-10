@@ -1,4 +1,4 @@
-package com.tenchael.ispring.web;
+package com.tenchael.ispring.web.fore;
 
 import static com.tenchael.ispring.common.Constants.DEFAULT_PAGE;
 import static com.tenchael.ispring.common.Constants.DEFAULT_PAGE_SIZE;
@@ -71,7 +71,7 @@ public class PlayerController {
 			model.addAllAttributes(bindingResult.getModel());
 			return "/player/list";
 		}
-		playerService.insert(player);
+		playerService.save(player);
 		return "redirect:/player/list";
 	}
 
@@ -91,7 +91,7 @@ public class PlayerController {
 			model.addAllAttributes(bindingResult.getModel());
 			return "/player/list";
 		}
-		playerService.update(player);
+		playerService.save(player);
 		return "redirect:/player/list";
 	}
 
@@ -100,7 +100,7 @@ public class PlayerController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@PathVariable("id") Integer id) {
 		log.debug("delete id={}", id);
-		playerService.deleteById(id);
+		playerService.delete(id);
 
 		return "redirect:/player/list";
 	}
@@ -111,7 +111,7 @@ public class PlayerController {
 			@RequestParam(value = "phone", required = false) String phone) {
 		log.debug("add a player name={}", name);
 		Player player = new Player(name, phone);
-		player = playerService.insert(player);
+		player = playerService.save(player);
 
 		return "redirect:/player/list";
 	}

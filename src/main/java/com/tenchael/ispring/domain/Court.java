@@ -1,13 +1,12 @@
 package com.tenchael.ispring.domain;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,8 +14,9 @@ import javax.validation.constraints.Size;
 import com.tenchael.ispring.common.EntityUtil;
 
 @Entity
-@Table(name = "t_player")
-public class Player implements Serializable {
+@Table(name = "t_court")
+public class Court implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -29,21 +29,21 @@ public class Player implements Serializable {
 	@NotNull
 	private String name;
 
-	@Column(name = "phone")
-	@Size(min = 7, max = 13)
-	private String phone;
+	@ManyToOne
+	private SportType sportType;
 
-	@OneToMany
-	private Set<Reservation> reservations;
+	@Column(name = "reservered")
+	@NotNull
+	private Boolean reservered = true;
 
-	public Player() {
-		super();
+	public Court() {
 	}
 
-	public Player(String name, String phone) {
+	public Court(String name, SportType sportType, Boolean reservered) {
 		super();
 		this.name = name;
-		this.phone = phone;
+		this.sportType = sportType;
+		this.reservered = reservered;
 	}
 
 	public Integer getId() {
@@ -62,24 +62,25 @@ public class Player implements Serializable {
 		this.name = name;
 	}
 
-	public String getPhone() {
-		return phone;
+	public SportType getSportType() {
+		return sportType;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setSportType(SportType sportType) {
+		this.sportType = sportType;
 	}
 
-	public Set<Reservation> getReservations() {
-		return reservations;
+	public Boolean getReservered() {
+		return reservered;
 	}
 
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
+	public void setReservered(Boolean reservered) {
+		this.reservered = reservered;
 	}
 
 	@Override
 	public String toString() {
 		return EntityUtil.propertiesToString(this);
 	}
+
 }

@@ -3,25 +3,51 @@ package com.tenchael.ispring.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.tenchael.ispring.common.EntityUtil;
+
+@Entity
+@Table(name = "t_reservation")
 public class Reservation implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue
 	private Integer id;
-	private String courtName;
+
+	@OneToOne
+	private Court court;
+
+	@Column(name = "date")
 	private Date date;
-	private Integer hour;
+
+	@Column(name = "duringHour")
+	private Integer duringHour = 1;
+
+	@ManyToOne
 	private Player player;
+
+	@OneToOne
 	private SportType sportType;
 
 	public Reservation() {
 		super();
 	}
 
-	public Reservation(String courtName, Date date, Integer hour,
+	public Reservation(Court court, Date date, Integer duringHour,
 			Player player, SportType sportType) {
 		super();
-		this.courtName = courtName;
+		this.court = court;
 		this.date = date;
-		this.hour = hour;
+		this.duringHour = duringHour;
 		this.player = player;
 		this.sportType = sportType;
 	}
@@ -34,12 +60,12 @@ public class Reservation implements Serializable {
 		this.id = id;
 	}
 
-	public String getCourtName() {
-		return courtName;
+	public Court getCourt() {
+		return court;
 	}
 
-	public void setCourtName(String courtName) {
-		this.courtName = courtName;
+	public void setCourt(Court court) {
+		this.court = court;
 	}
 
 	public Date getDate() {
@@ -50,12 +76,12 @@ public class Reservation implements Serializable {
 		this.date = date;
 	}
 
-	public Integer getHour() {
-		return hour;
+	public Integer getDuringHour() {
+		return duringHour;
 	}
 
-	public void setHour(Integer hour) {
-		this.hour = hour;
+	public void setDuringHour(Integer duringHour) {
+		this.duringHour = duringHour;
 	}
 
 	public Player getPlayer() {
@@ -72,6 +98,11 @@ public class Reservation implements Serializable {
 
 	public void setSportType(SportType sportType) {
 		this.sportType = sportType;
+	}
+
+	@Override
+	public String toString() {
+		return EntityUtil.propertiesToString(this);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.tenchael.ispring.web;
+package com.tenchael.ispring.web.back;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class HomeController {
+@RequestMapping("/back")
+public class HomeControllerBack {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -24,14 +25,16 @@ public class HomeController {
 	private Settings settings;
 
 	/**
-	 * This method returns the view name as a string, and passes a model map to the view.
-	 * The view name is resolved using the viewResolver defined in servlet-context.xml.
-	 * Attribute values in the model are accessible by referencing the name of the attribute (e.g. mode).
+	 * This method returns the view name as a string, and passes a model map to
+	 * the view. The view name is resolved using the viewResolver defined in
+	 * servlet-context.xml. Attribute values in the model are accessible by
+	 * referencing the name of the attribute (e.g. mode).
 	 *
-	 * @param model contains values to be passed through to the view
+	 * @param model
+	 *            contains values to be passed through to the view
 	 * @return name of view to resolve
 	 */
-	@RequestMapping(value={"/", "/home"})
+	@RequestMapping(value = { "/", "/home" })
 	public String actionHome(Model model) {
 		log.info("actionHome");
 
@@ -41,17 +44,21 @@ public class HomeController {
 			model.addAttribute("mode", "unknown");
 		}
 		model.addAttribute("returnType", "String");
-		return "home";
+		return "back/home";
 	}
 
 	/**
-	 * This method returns a ModelAndView object, which contains the view name, and a model map.
-	 * The view name is resolved using the viewResolver defined in servlet-context.xml.
-	 * Attribute values in the model are accessible in the view by referencing the name (e.g. model.mode), or simply by referencing the name of the attribute (e.g. mode).
-	 * @param model contains values to be passed through to the view
+	 * This method returns a ModelAndView object, which contains the view name,
+	 * and a model map. The view name is resolved using the viewResolver defined
+	 * in servlet-context.xml. Attribute values in the model are accessible in
+	 * the view by referencing the name (e.g. model.mode), or simply by
+	 * referencing the name of the attribute (e.g. mode).
+	 * 
+	 * @param model
+	 *            contains values to be passed through to the view
 	 * @return ModelAndView object, which contains the view and model
 	 */
-	@RequestMapping(value="/home/modelAndView")
+	@RequestMapping(value = "/home/modelAndView")
 	public ModelAndView actionHomeModelAndView(Model model) {
 		log.info("actionHomeModelAndView");
 
@@ -61,14 +68,16 @@ public class HomeController {
 			model.addAttribute("mode", "unknown");
 		}
 		model.addAttribute("returnType", "ModelAndView");
-		return new ModelAndView("home", "model", model);
+		return new ModelAndView("back/home", "model", model);
 	}
 
 	/**
-	 * This method uses the @ResponseBody annotation to automagically use Jackson to return the map in JSON format.
+	 * This method uses the @ResponseBody annotation to automagically use
+	 * Jackson to return the map in JSON format.
+	 * 
 	 * @return json response
 	 */
-	@RequestMapping(value="/home.json")
+	@RequestMapping(value = "/home.json")
 	public @ResponseBody Map<String, String> actionHomeJson() {
 		log.info("actionHomeJson");
 

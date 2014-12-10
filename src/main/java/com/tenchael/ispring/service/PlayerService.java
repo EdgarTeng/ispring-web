@@ -1,21 +1,16 @@
 package com.tenchael.ispring.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.tenchael.ispring.domain.Player;
 
-public interface PlayerService {
+public interface PlayerService extends BasicService<Player, Integer> {
 
 	Page<Player> findAll(int page, int size);
 
 	Page<Player> findByNameLike(String name, int page, int size);
 
-	Player findById(Integer id);
-
-	Player insert(Player player);
-
-	Player update(Player player);
-
-	void deleteById(Integer id);
+	Page<Player> search(String condition, Pageable page);
 
 }

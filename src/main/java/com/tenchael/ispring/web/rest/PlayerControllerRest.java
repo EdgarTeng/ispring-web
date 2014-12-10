@@ -1,10 +1,10 @@
-package com.tenchael.ispring.rest;
+package com.tenchael.ispring.web.rest;
 
 import static com.tenchael.ispring.common.Constants.CODE;
-import static com.tenchael.ispring.common.Constants.MESSAGE;
-import static com.tenchael.ispring.common.Constants.OP_SUCCESS;
 import static com.tenchael.ispring.common.Constants.DEFAULT_PAGE;
 import static com.tenchael.ispring.common.Constants.DEFAULT_PAGE_SIZE;
+import static com.tenchael.ispring.common.Constants.MESSAGE;
+import static com.tenchael.ispring.common.Constants.OP_SUCCESS;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +13,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +31,8 @@ import com.tenchael.ispring.exception.NotFoundException;
 import com.tenchael.ispring.service.PlayerService;
 
 @Controller
-@RequestMapping("/rest/player")
-public class PlayerController2 {
+@RequestMapping(value = { "/rest/player", "/test/rest/player" })
+public class PlayerControllerRest {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -56,6 +60,20 @@ public class PlayerController2 {
 		return players;
 	}
 
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public @ResponseBody List<Player> search(
+			@RequestParam(value = "condition", required = true) String condition,
+			@RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
+			@RequestParam(value = "pageSize", required = false) Integer pageSize) {
+		log.info("search players with restful way");
+		Sort sort = new Sort(Direction.DESC, "id");
+		int size = (null != pageSize) ? pageSize : DEFAULT_PAGE_SIZE;
+		Pageable page = new PageRequest(pageIndex, size, sort);
+		List<Player> players = playerService.search(condition, page)
+				.getContent();
+		return players;
+	}
+
 	@RequestMapping(value = { "/", "/list/{pageIndex}" })
 	public @ResponseBody List<Player> list(
 			@PathVariable("pageIndex") Integer pageIndex) {
@@ -67,12 +85,12 @@ public class PlayerController2 {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(
-			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "phone", required = false) String phone,
 			Model model) {
 		log.info("save a player,name=[]", name);
 		Player player = new Player(name, phone);
-		playerService.insert(player);
+		playerService.save(player);
 		return "redirect:/rest/player/list/" + DEFAULT_PAGE;
 	}
 
@@ -80,7 +98,7 @@ public class PlayerController2 {
 	public @ResponseBody Map<String, Object> delete(
 			@PathVariable("id") Integer id) throws NotFoundException {
 		log.debug("delete id={}", id);
-		playerService.deleteById(id);
+		playerService.delete(id);
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		retMap.put(CODE, OP_SUCCESS);
 		retMap.put(MESSAGE, settings.getProperty("message.delete.success"));
