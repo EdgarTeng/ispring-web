@@ -4,7 +4,7 @@
 
 <html>
 <head>
-<title>Player Form</title>
+<title>CourtStatus Form</title>
 </head>
 <body>
 	<form:form method="post" action="save" modelAttribute="bean">
@@ -13,10 +13,6 @@
 			<tr>
 				<td><b>name:</b></td>
 				<td><form:input path="name" /></td>
-			</tr>
-			<tr>
-				<td><b>phone:</b></td>
-				<td><form:input path="phone" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="submit"></td>

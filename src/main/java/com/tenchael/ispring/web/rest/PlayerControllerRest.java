@@ -55,8 +55,10 @@ public class PlayerControllerRest {
 			@PathVariable("name") String name) {
 		log.info("list players with restful way");
 		int page = (pageIndex != null) ? pageIndex : DEFAULT_PAGE;
-		List<Player> players = playerService.findByNameLike(name, page,
-				DEFAULT_PAGE_SIZE).getContent();
+		Pageable pageable = new PageRequest(page, DEFAULT_PAGE_SIZE,
+				Direction.DESC, "id");
+		List<Player> players = playerService.findByNameLike(name, pageable)
+				.getContent();
 		return players;
 	}
 

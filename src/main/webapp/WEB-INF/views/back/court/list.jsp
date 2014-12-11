@@ -4,7 +4,7 @@
 
 <html>
 <head>
-<title>Player List</title>
+<title>Court List</title>
 </head>
 <body>
 
@@ -21,7 +21,7 @@
 	<!-- add a new sportType -->
 	<table>
 		<tr>
-			<td><a href="create">Add a player</a></td>
+			<td><a href="create">Add a court</a></td>
 		</tr>
 	</table>
 
@@ -29,13 +29,15 @@
 	<table border="1">
 		<tr>
 			<td><b>name</b></td>
-			<td><b>phone</b></td>
+			<td><b>sportType</b></td>
+			<td><b>reservered</b></td>
 			<td><b>options</b></td>
 		</tr>
 		<c:forEach var="bean" items="${pagedList.content}">
 			<tr>
 				<td>${bean.name }</td>
-				<td>${bean.phone }</td>
+				<td>${bean.sportType.name }</td>
+				<td>${bean.reservered }</td>
 				<td><a href="delete?id=${bean.id }">Delete</a> | <a
 					href="edit?id=${bean.id }">Edit</a></td>
 			</tr>

@@ -44,13 +44,10 @@ public class PlayerServiceImpl implements PlayerService {
 		return playerDao.findAll(page);
 	}
 
-	public Page<Player> findByNameLike(String name, int page, int size) {
-		Pageable pageable = new PageRequest(page, size, new Sort(
-				Direction.DESC, "id"));
-		String q = "%" + name + "%";
-		//Page<Player> persons = playerDao.findByNameLike(q, pageable);
-		//return persons;
-		return null;
+	public Page<Player> findByNameLike(String name, Pageable pageable) {
+		String nameLike = "%" + name + "%";
+		Page<Player> players = playerDao.findByNameLike(nameLike, pageable);
+		return players;
 	}
 
 	public Player findById(Integer id) {
@@ -62,10 +59,10 @@ public class PlayerServiceImpl implements PlayerService {
 			public Predicate toPredicate(Root<Player> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predictes = new ArrayList<Predicate>();
-				predictes.add(cb.like(root.<String> get("name"),
-						condition.trim()));
+				predictes.add(cb.like(root.<String> get("name"), "%"
+						+ condition.trim() + "%"));
 				predictes.add(cb.like(root.<String> get("phone"),
-						condition.trim()));
+						condition.trim() + "%"));
 				if (predictes.size() > 0) {
 					return cb.or(predictes.toArray(new Predicate[predictes
 							.size()]));

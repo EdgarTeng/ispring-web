@@ -4,7 +4,7 @@
 
 <html>
 <head>
-<title>Player Form</title>
+<title>Court Form</title>
 </head>
 <body>
 	<form:form method="post" action="save" modelAttribute="bean">
@@ -15,8 +15,14 @@
 				<td><form:input path="name" /></td>
 			</tr>
 			<tr>
-				<td><b>phone:</b></td>
-				<td><form:input path="phone" /></td>
+				<td><b>sportType:</b></td>
+				<td><form:select path="sportType" items="${sportTypeList }"
+						itemLabel="name"></form:select></td>
+			</tr>
+			<tr>
+				<td><b>status:</b></td>
+				<td><form:select path="status" items="${courtStatusList }"
+						itemLabel="name"></form:select></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="submit"></td>

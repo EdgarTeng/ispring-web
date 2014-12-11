@@ -13,10 +13,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.tenchael.ispring.common.EntityUtil;
+import com.tenchael.ispring.common.EntityLogable;
 
 @Entity
 @Table(name = "t_player")
-public class Player implements Serializable {
+public class Player implements Serializable, EntityLogable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -78,8 +79,7 @@ public class Player implements Serializable {
 		this.reservations = reservations;
 	}
 
-	@Override
-	public String toString() {
+	public String printForLog() {
 		String[] props = new String[] { "id", "name", "phone" };
 		return EntityUtil.propertiesToString(this, props);
 	}

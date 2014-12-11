@@ -12,10 +12,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.tenchael.ispring.common.EntityUtil;
+import com.tenchael.ispring.common.EntityLogable;
 
 @Entity
 @Table(name = "t_court")
-public class Court implements Serializable {
+public class Court implements Serializable, EntityLogable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,18 +33,17 @@ public class Court implements Serializable {
 	@ManyToOne
 	private SportType sportType;
 
-	@Column(name = "reservered")
-	@NotNull
-	private Boolean reservered = true;
+	@ManyToOne
+	private CourtStatus status;
 
 	public Court() {
 	}
 
-	public Court(String name, SportType sportType, Boolean reservered) {
+	public Court(String name, SportType sportType, CourtStatus status) {
 		super();
 		this.name = name;
 		this.sportType = sportType;
-		this.reservered = reservered;
+		this.status = status;
 	}
 
 	public Integer getId() {
@@ -70,16 +70,15 @@ public class Court implements Serializable {
 		this.sportType = sportType;
 	}
 
-	public Boolean getReservered() {
-		return reservered;
+	public CourtStatus getStatus() {
+		return status;
 	}
 
-	public void setReservered(Boolean reservered) {
-		this.reservered = reservered;
+	public void setStatus(CourtStatus status) {
+		this.status = status;
 	}
 
-	@Override
-	public String toString() {
+	public String printForLog() {
 		String[] props = new String[] { "id", "name", "reservered", "sportType" };
 		return EntityUtil.propertiesToString(this, props);
 	}

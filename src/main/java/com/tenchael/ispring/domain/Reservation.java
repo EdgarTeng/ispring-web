@@ -12,10 +12,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.tenchael.ispring.common.EntityUtil;
+import com.tenchael.ispring.common.EntityLogable;
 
 @Entity
 @Table(name = "t_reservation")
-public class Reservation implements Serializable {
+public class Reservation implements Serializable, EntityLogable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -100,8 +101,7 @@ public class Reservation implements Serializable {
 		this.sportType = sportType;
 	}
 
-	@Override
-	public String toString() {
+	public String printForLog() {
 		String[] props = new String[] { "id", "name", "court", "date" };
 		return EntityUtil.propertiesToString(this, props);
 	}

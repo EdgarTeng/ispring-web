@@ -1,10 +1,10 @@
 package com.tenchael.ispring.web.back;
 
 import static com.tenchael.ispring.common.Constants.CREATE;
-import static com.tenchael.ispring.common.Constants.DEFAULT_PAGE;
-import static com.tenchael.ispring.common.Constants.DEFAULT_PAGE_SIZE;
 import static com.tenchael.ispring.common.Constants.EDIT;
 import static com.tenchael.ispring.common.Constants.OPRT;
+
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -22,17 +22,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.tenchael.ispring.domain.Player;
-import com.tenchael.ispring.service.PlayerService;
+import com.tenchael.ispring.domain.CourtStatus;
+import com.tenchael.ispring.domain.SportType;
+import com.tenchael.ispring.service.CourtStatusService;
+import com.tenchael.ispring.service.SportTypeService;
 
 @Controller
-@RequestMapping("/back/player")
-public class PlayerControllerBack {
+@RequestMapping("/back/courtStatus")
+public class CourtStatusControllerBack {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private PlayerService playerService;
+	private CourtStatusService courStatustService;
+
+	@Autowired
+	private SportTypeService sportTypeService;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(
@@ -43,71 +48,60 @@ public class PlayerControllerBack {
 			Model model) {
 		Pageable pageable = new PageRequest(pageIndex, pageSize,
 				Direction.DESC, "id");
-		Page<Player> pagedList = playerService.findAll(pageable);
-		log.info("List player list={}", pagedList.getContent());
+		Page<CourtStatus> pagedList = courStatustService.findAll(pageable);
+		log.info("List courtStatus list={}", pagedList.getContent());
 		model.addAttribute("pagedList", pagedList);
-		return "back/player/list";
+		return "back/courtStatus/list";
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public String get(@RequestParam(value = "id", required = true) Integer id,
+	public String get(@RequestParam(value = "id", required = true) Short id,
 			Model model) {
-		Player player = playerService.findById(id);
-		log.info("Get a player={}", player);
-		model.addAttribute("bean", player);
-		return "back/player/list";
+		CourtStatus courtStatus = courStatustService.findById(id);
+		log.info("Get a courtStatus={}", courtStatus);
+		model.addAttribute("bean", courtStatus);
+		return "back/courtStatus/list";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public String create(Model model) {
-		log.info("To create a player...");
-		Player player = new Player();
-		model.addAttribute("bean", player);
+		log.info("To create a courtStatus...");
+		CourtStatus courtStatus = new CourtStatus();
+		List<SportType> sportTypeList = sportTypeService.findAll();
+		model.addAttribute("sportTypeList", sportTypeList);
+		model.addAttribute("bean", courtStatus);
 		model.addAttribute(OPRT, CREATE);
-		return "back/player/form";
+		return "back/courtStatus/form";
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String edit(@RequestParam(value = "id", required = true) Integer id,
+	public String edit(@RequestParam(value = "id", required = true) Short id,
 			Model model) {
-		Player player = playerService.findById(id);
-		log.info("To edit a player={}", player);
-		model.addAttribute("bean", player);
+		CourtStatus courtStatus = courStatustService.findById(id);
+		log.info("To edit a courtStatus={}", courtStatus);
+		model.addAttribute("bean", courtStatus);
 		model.addAttribute(OPRT, EDIT);
-		return "back/player/form";
+		return "back/courtStatus/form";
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(@Valid Player player, BindingResult bindingResult,
-			Model model) {
-		log.info("Save player={}", player);
+	public String save(@Valid CourtStatus courtStatus,
+			BindingResult bindingResult, Model model) {
+		log.info("Save courtStatus={}", courtStatus);
 		if (bindingResult.hasErrors()) {
 			log.warn("validation error={}", bindingResult.getModel());
 			model.addAllAttributes(bindingResult.getModel());
-			return "back/player/list";
+			return "back/courtStatus/list";
 		}
-		playerService.save(player);
-		return "redirect:/back/player/list";
+		courStatustService.save(courtStatus);
+		return "redirect:/back/courtStatus/list";
 	}
 
 	@RequestMapping(value = "/delete")
-	public String delete(@RequestParam(value = "id", required = true) Integer id) {
-		log.info("Delete a player id={}", id);
-		playerService.delete(id);
-		return "redirect:/back/player/list";
+	public String delete(@RequestParam(value = "id", required = true) Short id) {
+		log.info("Delete a courtStatus id={}", id);
+		courStatustService.delete(id);
+		return "redirect:/back/courtStatus/list";
 	}
 
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public String search(
-			@RequestParam(value = "condition", required = true) String condition,
-			Model model) {
-		log.info("Search sportTypes condition={}", condition);
-		Pageable pageable = new PageRequest(DEFAULT_PAGE, DEFAULT_PAGE_SIZE,
-				Direction.DESC, "id");
-		Page<Player> pagedList = playerService.search(condition,
-				pageable);
-		log.info("List player list={}", pagedList.getContent());
-		model.addAttribute("pagedList", pagedList);
-		return "back/player/list";
-	}
 }

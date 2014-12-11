@@ -1,13 +1,16 @@
 package com.tenchael.ispring.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.tenchael.ispring.domain.Court;
 
 public interface CourtService extends BasicService<Court, Integer> {
 
-	List<Court> findByNameLike(String name);
+	Page<Court> findByNameLike(String name,Pageable pageable);
 
-	List<Court> findBySportTypeName(String sportTypeName);
+	Page<Court> findBySportTypeName(String sportTypeName,Pageable pageable);
+	
+	Page<Court> search(String condition,Pageable pageable);
 
 }
