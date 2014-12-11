@@ -102,7 +102,7 @@ public class Reservation implements Serializable {
 
 	@Override
 	public String toString() {
-		String[] props = new String[] { "id", "name", "court", "date",
+		String[] props = new String[] { "id", "court", "date",
 				"duringHour", "player", "sportType" };
 		return EntityUtil.propertiesToString(this, props);
 	}

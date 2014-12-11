@@ -56,24 +56,25 @@ public class ReservationServiceImpl implements ReservationService {
 			public Predicate toPredicate(Root<Reservation> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
 				cb.like(root.<SportType> get("sportType").<String> get("name"),
-						sportTypeName);
+						sportTypeName + "%");
 				return cb.conjunction();
 			}
 		};
 		return reservationDao.findAll(spec, pageable);
 	}
 
-	public List<Reservation> findByPlayerName(String playerName) {
-		//return reservationDao.findByPlayerName(playerName);
-		return null;
+	public Page<Reservation> findByPlayerName(String playerName,
+			Pageable pageable) {
+		String qName = "%" + playerName + "%";
+		return reservationDao.findByPlayerName(qName, pageable);
 	}
 
 	public Reservation findByCourt(Court court) {
-		/*List<Reservation> reservations = reservationDao.findByCourt(court);
-		if (null != reservations || reservations.isEmpty()) {
-			return null;
-		}
-		return reservations.get(0);*/
+		/*
+		 * List<Reservation> reservations = reservationDao.findByCourt(court);
+		 * if (null != reservations || reservations.isEmpty()) { return null; }
+		 * return reservations.get(0);
+		 */
 		return null;
 	}
 
