@@ -34,7 +34,7 @@ public class PlayerControllerBack {
 	@Autowired
 	private PlayerService playerService;
 
-	@RequestMapping(value = "/list/{pageIndex}", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(
 			@PathVariable("pageIndex") Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false) Integer pageSize,

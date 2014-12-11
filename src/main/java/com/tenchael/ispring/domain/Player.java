@@ -80,6 +80,7 @@ public class Player implements Serializable {
 
 	@Override
 	public String toString() {
-		return EntityUtil.propertiesToString(this);
+		String[] props = new String[] { "id", "name", "phone" };
+		return EntityUtil.propertiesToString(this, props);
 	}
 }

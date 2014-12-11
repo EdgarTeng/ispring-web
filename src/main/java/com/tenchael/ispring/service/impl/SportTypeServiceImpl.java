@@ -1,13 +1,21 @@
 package com.tenchael.ispring.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tenchael.ispring.domain.Player;
 import com.tenchael.ispring.domain.SportType;
 import com.tenchael.ispring.repository.SportTypeDao;
 import com.tenchael.ispring.service.SportTypeService;
@@ -41,9 +49,15 @@ public class SportTypeServiceImpl implements SportTypeService {
 		sportTypeDao.delete(id);
 	}
 
-	public List<SportType> findByNameLike(String name) {
-		//return sportTypeDao.findByName();
-		return null;
+	public Page<SportType> findByNameLike(final String name, Pageable pageable) {
+		Specification<SportType> spec = new Specification<SportType>() {
+			public Predicate toPredicate(Root<SportType> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.like(root.<String> get("name"), "%" + name.trim()
+						+ "%");
+			}
+		};
+		return sportTypeDao.findAll(spec, pageable);
 	}
 
 }

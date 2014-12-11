@@ -80,7 +80,8 @@ public class Court implements Serializable {
 
 	@Override
 	public String toString() {
-		return EntityUtil.propertiesToString(this);
+		String[] props = new String[] { "id", "name", "reservered", "sportType" };
+		return EntityUtil.propertiesToString(this, props);
 	}
 
 }

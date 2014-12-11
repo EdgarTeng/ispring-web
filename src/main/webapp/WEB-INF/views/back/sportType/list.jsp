@@ -7,28 +7,44 @@
 <title>SportType List</title>
 </head>
 <body>
+
+	<!--  search bar -->
+	<form action="search" method="post">
+		<table>
+			<tr>
+				<td><input type="text" name="condition"></td>
+				<td><input type="submit" value="search"></td>
+			</tr>
+		</table>
+	</form>
+
+	<!-- add a new sportType -->
 	<table>
 		<tr>
-			<td><a href="../create">Add a sportType</a></td>
+			<td><a href="create">Add a sportType</a></td>
 		</tr>
 	</table>
+
+	<!-- list sportTypes -->
 	<table border="1">
 		<tr>
 			<td><b>name</b></td>
 			<td><b>options</b></td>
 		</tr>
-		<c:forEach var="sportType" items="${sportTypes}">
+		<c:forEach var="bean" items="${pagedList.content}">
 			<tr>
-				<td>${sportType.name }</td>
-				<td><a href="../delete/${sportType.id }">Delete</a> | <a
-					href="../edit/${sportType.id }">Edit</a></td>
+				<td>${bean.name }</td>
+				<td><a href="delete?id=${bean.id }">Delete</a> | <a
+					href="edit?id=${bean.id }">Edit</a></td>
 			</tr>
 		</c:forEach>
 	</table>
+
+	<!-- paging -->
 	<table>
 		<tr>
-			<c:forEach var="index" begin="1" end="${totalPages }">
-				<td><a href="${index-1 }">${index}</a></td>
+			<c:forEach var="index" begin="1" end="${pagedList.totalPages }">
+				<td><a href="list?pageIndex=${index-1 }">${index}</a></td>
 			</c:forEach>
 		</tr>
 	</table>

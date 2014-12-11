@@ -7,8 +7,7 @@
 <title>SportType Form</title>
 </head>
 <body>
-	<form:form method="post" action="${oprt=='create'?'save':'../save'}"
-		modelAttribute="sportType">
+	<form:form method="post" action="save" modelAttribute="bean">
 		<table>
 			<form:hidden path="id" />
 			<tr>

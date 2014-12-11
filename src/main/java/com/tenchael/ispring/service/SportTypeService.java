@@ -1,11 +1,12 @@
 package com.tenchael.ispring.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.tenchael.ispring.domain.SportType;
 
 public interface SportTypeService extends BasicService<SportType, Integer> {
 
-	List<SportType> findByNameLike(String name);
+	Page<SportType> findByNameLike(String name, Pageable pageable);
 
 }

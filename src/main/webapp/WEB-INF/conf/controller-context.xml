@@ -15,6 +15,7 @@
 		requests to @Controllers -->
 	<mvc:annotation-driven />
 
+
 	<!-- Resolve view names to views -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -30,6 +31,7 @@
 	<mvc:resources mapping="/js/**" location="/WEB-INF/views/js/" />
 	<mvc:resources mapping="/css/**" location="/WEB-INF/views/css/" />
 	<mvc:resources mapping="/img/**" location="/WEB-INF/views/img/" />
+	<mvc:resources mapping="/tags" location="/WEB-INF/views/tags/" />
 	<mvc:resources mapping="/*.htm/**" location="/WEB-INF/views/" />
 	<mvc:resources mapping="/*.html/**" location="/WEB-INF/views/" />
 
