@@ -12,11 +12,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import com.tenchael.ispring.common.EntityUtil;
-import com.tenchael.ispring.common.EntityLogable;
 
 @Entity
 @Table(name = "t_sportType")
-public class SportType implements Serializable, EntityLogable {
+public class SportType implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "id")
@@ -63,8 +62,10 @@ public class SportType implements Serializable, EntityLogable {
 		this.courts = courts;
 	}
 
-	public String printForLog() {
+	@Override
+	public String toString() {
 		String[] props = new String[] { "id", "name" };
 		return EntityUtil.propertiesToString(this, props);
 	}
+
 }

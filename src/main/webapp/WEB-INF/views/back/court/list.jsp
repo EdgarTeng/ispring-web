@@ -30,14 +30,14 @@
 		<tr>
 			<td><b>name</b></td>
 			<td><b>sportType</b></td>
-			<td><b>reservered</b></td>
+			<td><b>courtStatus</b></td>
 			<td><b>options</b></td>
 		</tr>
 		<c:forEach var="bean" items="${pagedList.content}">
 			<tr>
 				<td>${bean.name }</td>
 				<td>${bean.sportType.name }</td>
-				<td>${bean.reservered }</td>
+				<td>${bean.courtStatus.name }</td>
 				<td><a href="delete?id=${bean.id }">Delete</a> | <a
 					href="edit?id=${bean.id }">Edit</a></td>
 			</tr>

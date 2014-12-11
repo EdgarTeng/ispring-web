@@ -16,13 +16,13 @@
 			</tr>
 			<tr>
 				<td><b>sportType:</b></td>
-				<td><form:select path="sportType" items="${sportTypeList }"
-						itemLabel="name"></form:select></td>
+				<td><form:select path="sportType.id" items="${sportTypeList }"
+						itemLabel="name" itemValue="id"></form:select></td>
 			</tr>
 			<tr>
 				<td><b>status:</b></td>
-				<td><form:select path="status" items="${courtStatusList }"
-						itemLabel="name"></form:select></td>
+				<td><form:select path="courtStatus.id" items="${courtStatusList }"
+						itemLabel="name" itemValue="id"></form:select></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="submit"></td>

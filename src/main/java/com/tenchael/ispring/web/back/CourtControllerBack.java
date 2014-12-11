@@ -26,11 +26,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tenchael.ispring.domain.Court;
 import com.tenchael.ispring.domain.CourtStatus;
-import com.tenchael.ispring.domain.Player;
 import com.tenchael.ispring.domain.SportType;
 import com.tenchael.ispring.service.CourtService;
 import com.tenchael.ispring.service.CourtStatusService;
-import com.tenchael.ispring.service.PlayerService;
 import com.tenchael.ispring.service.SportTypeService;
 
 @Controller
@@ -90,6 +88,10 @@ public class CourtControllerBack {
 			Model model) {
 		Court court = courtService.findById(id);
 		log.info("To edit a court={}", court);
+		List<SportType> sportTypeList = sportTypeService.findAll();
+		List<CourtStatus> courtStatusList = courtStatusService.findAll();
+		model.addAttribute("sportTypeList", sportTypeList);
+		model.addAttribute("courtStatusList", courtStatusList);
 		model.addAttribute("bean", court);
 		model.addAttribute(OPRT, EDIT);
 		return "back/court/form";

@@ -12,11 +12,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.tenchael.ispring.common.EntityUtil;
-import com.tenchael.ispring.common.EntityLogable;
 
 @Entity
 @Table(name = "t_court")
-public class Court implements Serializable, EntityLogable {
+public class Court implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,16 +33,16 @@ public class Court implements Serializable, EntityLogable {
 	private SportType sportType;
 
 	@ManyToOne
-	private CourtStatus status;
+	private CourtStatus courtStatus;
 
 	public Court() {
 	}
 
-	public Court(String name, SportType sportType, CourtStatus status) {
+	public Court(String name, SportType sportType, CourtStatus courtStatus) {
 		super();
 		this.name = name;
 		this.sportType = sportType;
-		this.status = status;
+		this.courtStatus = courtStatus;
 	}
 
 	public Integer getId() {
@@ -70,16 +69,18 @@ public class Court implements Serializable, EntityLogable {
 		this.sportType = sportType;
 	}
 
-	public CourtStatus getStatus() {
-		return status;
+	public CourtStatus getCourtStatus() {
+		return courtStatus;
 	}
 
-	public void setStatus(CourtStatus status) {
-		this.status = status;
+	public void setCourtStatus(CourtStatus courtStatus) {
+		this.courtStatus = courtStatus;
 	}
 
-	public String printForLog() {
-		String[] props = new String[] { "id", "name", "reservered", "sportType" };
+	@Override
+	public String toString() {
+		String[] props = new String[] { "id", "name", "sportType",
+				"courtStatus" };
 		return EntityUtil.propertiesToString(this, props);
 	}
 
