@@ -28,10 +28,10 @@
 		base-package="com.tenchael.ispring.web.back,com.tenchael.ispring.web.fore,com.tenchael.ispring.web.rest" />
 
 	<!-- URL patterns for static resource requests -->
-	<mvc:resources mapping="/js/**" location="/WEB-INF/views/js/" />
-	<mvc:resources mapping="/css/**" location="/WEB-INF/views/css/" />
-	<mvc:resources mapping="/img/**" location="/WEB-INF/views/img/" />
-	<mvc:resources mapping="/*.htm/**" location="/WEB-INF/views/" />
-	<mvc:resources mapping="/*.html/**" location="/WEB-INF/views/" />
+	<mvc:resources mapping="/resources/js/**" location="/WEB-INF/resources/js/" />
+	<mvc:resources mapping="/resources/css/**" location="/WEB-INF/resources/css/" />
+	<mvc:resources mapping="/resources/img/**" location="/WEB-INF/resources/img/" />
+	<mvc:resources mapping="/resources/*.htm/**" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="/resources/*.html/**" location="/WEB-INF/resources/" />
 
 </beans>

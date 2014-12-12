@@ -1,22 +1,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page
-	import="org.springframework.security.core.context.SecurityContextHolder"%>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" media="screen"
 	href="resources/css/style.css" />
-<title>Home</title>
+<title>User</title>
 </head>
 
 <body>
 	<jsp:include page="menu.jsp" />
-	<h1 id="banner">Home</h1>
+	<h1 id="banner">User</h1>
 	<hr />
 
-	<p>
-		Welcome <span id="username"><%=SecurityContextHolder.getContext().getAuthentication()
-					.getName()%></span>!
-	</p>
+	<p>All users can see this page</p>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
 		et velit et sem fermentum viverra. Duis fringilla consequat lectus, et
 		rhoncus mauris porta ut. Cum sociis natoque penatibus et magnis dis

@@ -8,6 +8,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			/WEB-INF/conf/application-context.xml
+			/WEB-INF/conf/security-context.xml
 			/WEB-INF/conf/service-context.xml
 			/WEB-INF/conf/dao-context.xml
 			/WEB-INF/conf/entity-context.xml
@@ -33,6 +34,18 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<!-- filter for security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- filter for characterEncoding -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
