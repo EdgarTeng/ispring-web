@@ -48,9 +48,10 @@ INSERT INTO `role` (`id`, `role`, `user`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` bigint(20) NOT NULL,  
-  `password` varchar(255) DEFAULT NULL,
+  `id` bigint(20) NOT NULL,    
   `username` varchar(255) DEFAULT NULL,
+	`password` varchar(255) DEFAULT NULL,
+	`enable`	 smallint DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -59,9 +60,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `password`, `username`) VALUES
-(1, '21232f297a57a5a743894a0e4a801fc3', 'admin'),
-(2, 'ee11cbb19052e40b07aac0ca060c23ee', 'Tenchael');
+INSERT INTO `user` (`id`, `username`, `password`, `enable`) VALUES
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3',1),
+(2, 'Tenchael', 'ee11cbb19052e40b07aac0ca060c23ee',1);
 
 --
 -- Constraints for dumped tables

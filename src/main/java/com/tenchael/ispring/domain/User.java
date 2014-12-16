@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -16,11 +17,18 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "id")
+	@GeneratedValue
 	private Long id;
 
-	@Column(unique = true)
+	@Column(name = "username", unique = true)
 	private String username;
+
+	@Column(name = "password")
 	private String password;
+
+	@Column(name = "enable")
+	private Short enable = 1;
 
 	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
 	private Role role;
@@ -29,10 +37,11 @@ public class User implements Serializable {
 		super();
 	}
 
-	public User(String username, String password, Role role) {
+	public User(String username, String password, Short enable, Role role) {
 		super();
 		this.username = username;
 		this.password = password;
+		this.enable = enable;
 		this.role = role;
 	}
 
@@ -58,6 +67,14 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Short getEnable() {
+		return enable;
+	}
+
+	public void setEnable(Short enable) {
+		this.enable = enable;
 	}
 
 	public Role getRole() {
