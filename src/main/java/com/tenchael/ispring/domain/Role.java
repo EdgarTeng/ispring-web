@@ -2,23 +2,31 @@ package com.tenchael.ispring.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.tenchael.ispring.common.EntityUtil;
 
 @Entity(name = "role")
+@Table(name = "t_role")
 public class Role implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "id")
+	@GeneratedValue
 	private Long id;
 
 	@OneToOne
 	private User user;
-	private Integer role;
+
+	@Column(name = "role")
+	private Integer role = 2;
 
 	public Role() {
 		super();

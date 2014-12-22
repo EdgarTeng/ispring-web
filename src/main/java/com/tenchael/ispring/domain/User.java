@@ -8,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.tenchael.ispring.common.EntityUtil;
 
 @Entity(name = "user")
+@Table(name = "t_user")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
