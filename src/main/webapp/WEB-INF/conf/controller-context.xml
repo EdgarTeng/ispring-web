@@ -31,7 +31,7 @@
 	<mvc:resources mapping="/resources/js/**" location="/WEB-INF/resources/js/" />
 	<mvc:resources mapping="/resources/css/**" location="/WEB-INF/resources/css/" />
 	<mvc:resources mapping="/resources/img/**" location="/WEB-INF/resources/img/" />
-	<mvc:resources mapping="/resources/*.htm/**" location="/WEB-INF/resources/" />
-	<mvc:resources mapping="/resources/*.html/**" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="/resources/*.htm" location="/WEB-INF/resources/" />
+	<mvc:resources mapping="/resources/*.html" location="/WEB-INF/resources/" />
 
 </beans>

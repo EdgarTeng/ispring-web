@@ -9,16 +9,14 @@
 		http://www.springframework.org/schema/util 
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
-	<http pattern="/resources*" security="none" />
+	<http pattern="/resources/**" security="none" />
 
 	<http auto-config="true" use-expressions="true">
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/logout" access="permitAll" />
 		<intercept-url pattern="/denied" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/user/*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/back/*" access="hasRole('ROLE_ADMIN')" />
-
+		<intercept-url pattern="/back/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 		<form-login login-page="/login" authentication-failure-url="/login/failure"
 			default-target-url="/" />
 
