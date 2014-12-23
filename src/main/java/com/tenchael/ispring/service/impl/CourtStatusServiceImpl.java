@@ -27,7 +27,7 @@ public class CourtStatusServiceImpl implements CourtStatusService {
 		return courtStatusDao.findAll(page);
 	}
 
-	public CourtStatus findById(Short id) {
+	public CourtStatus getById(Short id) {
 		return courtStatusDao.findOne(id);
 	}
 
@@ -37,8 +37,14 @@ public class CourtStatusServiceImpl implements CourtStatusService {
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(Short id) {
-		courtStatusDao.delete(id);
+	public int delete(Short id) {
+		int result = 1;
+		try {
+			courtStatusDao.delete(id);
+		} catch (Exception e) {
+			result = 0;
+		}
+		return result;
 	}
 
 }

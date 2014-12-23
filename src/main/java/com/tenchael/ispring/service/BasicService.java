@@ -11,10 +11,10 @@ public interface BasicService<Entity extends Serializable, ID extends Serializab
 
 	public Page<Entity> findAll(Pageable page);
 
-	public Entity findById(ID id);
+	public Entity getById(ID id);
 
 	public Entity save(Entity entity);
 
-	public void delete(ID id);
+	public int delete(ID id);
 
 }

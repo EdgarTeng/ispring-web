@@ -9,28 +9,90 @@
 		http://www.springframework.org/schema/util 
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
+	<!-- 开发环境可以放置 <debug /> 配置，会输出详细Security处理日志，正式环境建议屏蔽 <debug /> 配置 -->
+	<debug />
+
+	<global-method-security pre-post-annotations="enabled" />
+
+	<!-- 不用权限管理的资源路径 -->
 	<http pattern="/resources/**" security="none" />
+	<http pattern="/index.jsp" security="none" />
+	<http pattern="/login" security="none" />
+	<http pattern="/register" security="none" />
+	<http pattern="/do_register" security="none" />
+	<http pattern="/getVerifyCode" security="none" />
+	<http pattern="/help" security="none" />
 
-	<http auto-config="true" use-expressions="true">
-		<intercept-url pattern="/login" access="permitAll" />
-		<intercept-url pattern="/register" access="permitAll" />
-		<intercept-url pattern="/do_register" access="permitAll" />
-		<intercept-url pattern="/logout" access="permitAll" />
-		<intercept-url pattern="/denied" access="hasRole('ROLE_USER')" />
+
+	<!-- 配置登录入口点 -->
+	<beans:bean id="authenticationProcessingFilterEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/login" />
+		<!-- 是否强制HTTPS -->
+		<beans:property name="forceHttps" value="false" />
+	</beans:bean>
+
+	<!-- 配置自定义的支持验证码等多功能过滤器 -->
+	<beans:bean id="validateCodeAuthenticationFilter"
+		init-method="init"
+		class="com.tenchael.ispring.security.ValidateCodeUsernamePasswordAuthenticationFilter">
+		<beans:property name="filterProcessesUrl" value="/doLogin"></beans:property>
+		<beans:property name="userNameParameter" value="userName"></beans:property>
+		<beans:property name="passWordParameter" value="passWord"></beans:property>
+		<beans:property name="successUrl" value="/u/main"></beans:property>
+		<beans:property name="failureUrl" value="/login"></beans:property>
+		<beans:property name="authenticationManager" ref="webAuthenticationManager"></beans:property>
+	</beans:bean>
+
+	<!-- <http use-expressions="true"> -->
+	<!-- 或 -->
+	<http use-expressions="true" entry-point-ref="authenticationProcessingFilterEntryPoint"
+		access-denied-page="/back/accessDenied">
+
+		<!-- 指定某角色能访问的资源 -->
 		<intercept-url pattern="/back/**" access="hasRole('ROLE_ADMIN')" />
+
+		<!-- 以上未列出的，也都必须验证才能访问 -->
 		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-		<form-login login-page="/login" authentication-failure-url="/login/failure"
-			default-target-url="/" />
 
-		<access-denied-handler error-page="/denied" />
+		<!-- 所有地址全开，无需验证，测试用 -->
+		<!-- <intercept-url pattern="/**" access="permitAll" /> -->
 
-		<logout invalidate-session="true" logout-success-url="/logout/success"
-			logout-url="/logout" />
+		<!-- logout-url 属性:这个指定的URL会触发注销操作，默认是 /j_spring_security_logout invalidate-session 
+			属性：如果为true，在注销的时候会销毁会话 delete-cookies 属性：以逗号分隔的cookies名称，在用户注销时删除指定的cookies -->
+		<logout logout-success-url="/logout.jsp" invalidate-session="true"
+			delete-cookies="JSESSIONID" />
+
+		<!-- 实现免登陆验证 -->
+		<remember-me />
+
+		<!-- session超时跳转页面 以及每用户可拥有的session最大个数 如果每次退出后，必须要求用户必须重开浏览器才能登录，可以将 invalid-session-url="/logout.jsp"，防止有些 
+			Web 应用把用户的会话标识符直接通过 URL 的参数来传递 -->
+		<session-management invalid-session-url="/back/main">
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="true" expired-url="/login" />
+		</session-management>
+
+		<!-- 使用验证码过滤器 -->
+		<custom-filter ref="validateCodeAuthenticationFilter"
+			position="FORM_LOGIN_FILTER" />
+		<!-- 使用自定义的过滤器 -->
+		<custom-filter ref="webSecurityFilter" before="FILTER_SECURITY_INTERCEPTOR" />
 	</http>
 
-	<authentication-manager>
-		<authentication-provider user-service-ref="userServiceImpl">
-			<password-encoder hash="md5" />
+
+	<!-- 密码的加密解密类，可以换成自己的，实现 PasswordEncoder 接口即可 -->
+	<beans:bean id="pwEncoder"
+		class="org.springframework.security.crypto.password.StandardPasswordEncoder" />
+
+	<!-- 实现了 UserDetailsService 接口的类 -->
+	<authentication-manager alias="webAuthenticationManager">
+		<authentication-provider user-service-ref="webUserDetailsService">
+			<!-- 密码的加密解密类 -->
+			<password-encoder ref="pwEncoder" />
+			<!-- 或 -->
+			<!-- <password-encoder hash="md5"/> -->
 		</authentication-provider>
 	</authentication-manager>
+
 </beans:beans>

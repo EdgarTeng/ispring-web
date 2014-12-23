@@ -52,7 +52,7 @@ public class SportTypeControllerBack {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String get(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		SportType sportType = sportTypeService.findById(id);
+		SportType sportType = sportTypeService.getById(id);
 		log.info("Get a sportType={}", sportType);
 		model.addAttribute("bean", sportType);
 		return "back/sportType/list";
@@ -70,7 +70,7 @@ public class SportTypeControllerBack {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		SportType sportType = sportTypeService.findById(id);
+		SportType sportType = sportTypeService.getById(id);
 		log.info("To edit a sportType={}", sportType);
 		model.addAttribute("bean", sportType);
 		model.addAttribute(OPRT, EDIT);

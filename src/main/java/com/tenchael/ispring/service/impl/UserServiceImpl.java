@@ -1,22 +1,30 @@
 package com.tenchael.ispring.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tenchael.ispring.common.DEncryptionUtils;
+import com.tenchael.ispring.common.DateUtil;
 import com.tenchael.ispring.domain.Role;
 import com.tenchael.ispring.domain.User;
+import com.tenchael.ispring.model.UserInfo;
 import com.tenchael.ispring.repository.UserDao;
 import com.tenchael.ispring.service.RoleService;
 import com.tenchael.ispring.service.UserService;
@@ -24,6 +32,9 @@ import com.tenchael.ispring.service.UserService;
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
+	private static Logger logger = LoggerFactory
+			.getLogger(UserServiceImpl.class);
+
 	@Autowired
 	private UserDao userDao;
 
@@ -38,80 +49,111 @@ public class UserServiceImpl implements UserService {
 		return userDao.findAll(page);
 	}
 
-	public User findById(Long id) {
+	public User getById(Long id) {
 		return userDao.findOne(id);
 	}
 
 	@Transactional(readOnly = false)
 	public User save(User entity) {
-		entity.setPassword(DEncryptionUtils.standPwdEncoder(entity
-				.getPassword()));
-		User user = userDao.save(entity);
-		Role role = new Role(user, 2);
-		role = roleService.save(role);
-		user.setRole(role);
-		return user;
+		try {
+			Long userId = entity.getId();
+			String userName = entity.getUserName();
+			String passWord = entity.getPassWord();
+
+			if (userId != null) {
+				User updateEntity = this.getById(userId);
+
+				updateEntity.setStatus(entity.getStatus());
+				updateEntity.setUserName(userName);
+				updateEntity.setLastUpdate(DateUtil.getCurrentTime());
+
+				if (StringUtils.isNotBlank(passWord)) {
+					updateEntity.setPassWord(DEncryptionUtils
+							.standPwdEncoder(passWord));
+				}
+
+				return this.userDao.save(updateEntity);
+			} else {
+				// 新增
+				if (null != this.getByUserName(userName)) {
+					return null;
+				}
+
+				if (StringUtils.isBlank(passWord)) {
+					// 新增用户，如果用户没有输入密码，则设置默认的密码
+					passWord = "123456";
+				}
+
+				entity.setCreateTime(DateUtil.getCurrentTime());
+				entity.setLastUpdate(DateUtil.getCurrentTime());
+				entity.setPassWord(DEncryptionUtils.standPwdEncoder(passWord));
+				return userDao.save(entity);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return null;
+		}
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(Long id) {
-		userDao.delete(id);
-	}
-
-	public UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException {
+	public int delete(Long id) {
+		int result = 1;
 		try {
-			com.tenchael.ispring.domain.User domainUser = userDao
-					.findByUsername(username);
-			if (domainUser == null) {
-				throw new UsernameNotFoundException("user do not exit");
-			}
-
-			boolean enabled = true;
-			if (0 == domainUser.getEnable()) {
-				enabled = false;
-			}
-
-			boolean accountNonExpired = true;
-			boolean credentialsNonExpired = true;
-			boolean accountNonLocked = true;
-
-			return new org.springframework.security.core.userdetails.User(
-					domainUser.getUsername(), domainUser.getPassword()
-							.toLowerCase(), enabled, accountNonExpired,
-					credentialsNonExpired, accountNonLocked,
-					getAuthorities(domainUser.getRole().getRole()));
-
+			userDao.delete(id);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			result = 0;
 		}
+		return result;
 	}
 
-	public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
-		List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
-		return authList;
+	public User getByUserName(String username) {
+		return userDao.findByUserName(username);
 	}
 
-	public List<String> getRoles(Integer role) {
-		List<String> roles = new ArrayList<String>();
+	public Page<User> searchByUserName(final String userName, Pageable pageable) {
+		Specification<User> spec = new Specification<User>() {
 
-		if (role.intValue() == 1) {
-			roles.add("ROLE_USER");
-			roles.add("ROLE_ADMIN");
-		} else if (role.intValue() == 2) {
-			roles.add("ROLE_USER");
-		}
-
-		return roles;
+			public Predicate toPredicate(Root<User> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
+				String qName = userName.trim() + "%";
+				return cb.like(root.<String> get("userName"), qName);
+			}
+		};
+		return userDao.findAll(spec, pageable);
 	}
 
-	public static List<GrantedAuthority> getGrantedAuthorities(
-			List<String> roles) {
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		for (String role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role));
+	@Transactional(readOnly = false)
+	public int delUsers(Long[] userIds) {
+		int result = userIds.length;
+		try {
+			List<Long> ids = new ArrayList<Long>();
+			for (Long id : userIds) {
+				ids.add(id);
+			}
+			List<User> users = userDao.findAll(ids);
+			userDao.deleteInBatch(users);
+		} catch (Exception e) {
+			result = 0;
 		}
-		return authorities;
+		return result;
+	}
+
+	@Transactional(readOnly = false)
+	public boolean saveUserRole(UserInfo userInfo) {
+		boolean result = true;
+		try {
+			User user = userDao.findOne(userInfo.getId());
+			Set<Role> roles = new HashSet<Role>();
+			for (Short roleId : userInfo.getRoles()) {
+				Role role = roleService.getById(roleId);
+				roles.add(role);
+			}
+			user.setRoles(roles);
+			userDao.save(user);
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
 	}
 
 }

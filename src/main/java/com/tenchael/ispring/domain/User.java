@@ -1,13 +1,18 @@
 package com.tenchael.ispring.domain;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.tenchael.ispring.common.EntityUtil;
@@ -23,28 +28,42 @@ public class User implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "username", unique = true)
-	private String username;
+	@Column(name = "userName", unique = true)
+	private String userName;
 
-	@Column(name = "password")
-	private String password;
+	@Column(name = "passWord")
+	private String passWord;
 
-	@Column(name = "enable")
-	private Short enable = 1;
+	@Column(name = "createTime")
+	private Date createTime;
 
-	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
-	private Role role;
+	@Column(name = "lastUpdate")
+	private Date lastUpdate;
+
+	/**
+	 * 1:∆Ù”√;0:Ω˚”√
+	 */
+	@Column(name = "status")
+	private Short status = 1;
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE })
+	@JoinTable(name = "t_user_role", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = { @JoinColumn(name = "roleId") })
+	private Set<Role> roles;
 
 	public User() {
 		super();
 	}
 
-	public User(String username, String password, Short enable, Role role) {
+	public User(String userName, String passWord, Date createTime,
+			Date lastUpdate, Short status, Set<Role> roles) {
 		super();
-		this.username = username;
-		this.password = password;
-		this.enable = enable;
-		this.role = role;
+		this.userName = userName;
+		this.passWord = passWord;
+		this.createTime = createTime;
+		this.lastUpdate = lastUpdate;
+		this.status = status;
+		this.roles = roles;
 	}
 
 	public Long getId() {
@@ -55,36 +74,52 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPassWord() {
+		return passWord;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
 	}
 
-	public Short getEnable() {
-		return enable;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setEnable(Short enable) {
-		this.enable = enable;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
-	public Role getRole() {
-		return role;
+	public Date getLastUpdate() {
+		return lastUpdate;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+	public Short getStatus() {
+		return status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override

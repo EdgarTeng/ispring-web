@@ -64,7 +64,7 @@ public class CourtControllerBack {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String get(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		Court court = courtService.findById(id);
+		Court court = courtService.getById(id);
 		log.info("Get a court={}", court);
 		model.addAttribute("bean", court);
 		return "back/court/list";
@@ -86,7 +86,7 @@ public class CourtControllerBack {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		Court court = courtService.findById(id);
+		Court court = courtService.getById(id);
 		log.info("To edit a court={}", court);
 		List<SportType> sportTypeList = sportTypeService.findAll();
 		List<CourtStatus> courtStatusList = courtStatusService.findAll();

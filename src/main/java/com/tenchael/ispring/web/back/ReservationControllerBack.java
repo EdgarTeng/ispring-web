@@ -69,7 +69,7 @@ public class ReservationControllerBack {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String get(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		Reservation reservation = reservationService.findById(id);
+		Reservation reservation = reservationService.getById(id);
 		log.info("Get a reservation={}", reservation);
 		model.addAttribute("bean", reservation);
 		return "back/reservation/list";
@@ -93,7 +93,7 @@ public class ReservationControllerBack {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		Reservation reservation = reservationService.findById(id);
+		Reservation reservation = reservationService.getById(id);
 		log.info("To edit a reservation={}", reservation);
 		List<Player> playerList = playerService.findAll();
 		List<SportType> sportTypeList = sportTypeService.findAll();

@@ -50,7 +50,7 @@ public class PlayerServiceImpl implements PlayerService {
 		return players;
 	}
 
-	public Player findById(Integer id) {
+	public Player getById(Integer id) {
 		return playerDao.findOne(id);
 	}
 
@@ -79,8 +79,14 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(Integer id) {
-		playerDao.delete(id);
+	public int delete(Integer id) {
+		int result = 1;
+		try {
+			playerDao.delete(id);
+		} catch (Exception e) {
+			result = 0;
+		}
+		return result;
 	}
 
 }

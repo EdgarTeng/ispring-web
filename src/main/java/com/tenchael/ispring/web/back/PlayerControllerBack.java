@@ -52,7 +52,7 @@ public class PlayerControllerBack {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String get(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		Player player = playerService.findById(id);
+		Player player = playerService.getById(id);
 		log.info("Get a player={}", player);
 		model.addAttribute("bean", player);
 		return "back/player/list";
@@ -70,7 +70,7 @@ public class PlayerControllerBack {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(@RequestParam(value = "id", required = true) Integer id,
 			Model model) {
-		Player player = playerService.findById(id);
+		Player player = playerService.getById(id);
 		log.info("To edit a player={}", player);
 		model.addAttribute("bean", player);
 		model.addAttribute(OPRT, EDIT);

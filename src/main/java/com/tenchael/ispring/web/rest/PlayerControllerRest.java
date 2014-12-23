@@ -31,7 +31,7 @@ import com.tenchael.ispring.exception.NotFoundException;
 import com.tenchael.ispring.service.PlayerService;
 
 @Controller
-@RequestMapping(value = { "/rest/player", "/test/rest/player" })
+@RequestMapping(value = { "/rest/player"})
 public class PlayerControllerRest {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -45,7 +45,7 @@ public class PlayerControllerRest {
 	@RequestMapping("/get/{id}")
 	public @ResponseBody Player findById(@PathVariable(value = "id") Integer id) {
 		log.info("list players with restful way");
-		Player player = playerService.findById(id);
+		Player player = playerService.getById(id);
 		return player;
 	}
 

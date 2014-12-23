@@ -45,7 +45,7 @@ public class CourtServiceImpl implements CourtService {
 		return courtDao.findAll(page);
 	}
 
-	public Court findById(Integer id) {
+	public Court getById(Integer id) {
 		return courtDao.findOne(id);
 	}
 
@@ -55,8 +55,14 @@ public class CourtServiceImpl implements CourtService {
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(Integer id) {
-		courtDao.delete(id);
+	public int delete(Integer id) {
+		int result = 1;
+		try {
+			courtDao.delete(id);
+		} catch (Exception e) {
+			result = 0;
+		}
+		return result;
 
 	}
 

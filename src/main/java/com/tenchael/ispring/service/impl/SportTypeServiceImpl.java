@@ -35,7 +35,7 @@ public class SportTypeServiceImpl implements SportTypeService {
 		return sportTypeDao.findAll(page);
 	}
 
-	public SportType findById(Integer id) {
+	public SportType getById(Integer id) {
 		return sportTypeDao.findOne(id);
 	}
 
@@ -45,8 +45,14 @@ public class SportTypeServiceImpl implements SportTypeService {
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(Integer id) {
-		sportTypeDao.delete(id);
+	public int delete(Integer id) {
+		int result = 1;
+		try {
+			sportTypeDao.delete(id);
+		} catch (Exception e) {
+			result = 0;
+		}
+		return result;
 	}
 
 	public Page<SportType> findByNameLike(final String name, Pageable pageable) {

@@ -35,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationDao.findAll(page);
 	}
 
-	public Reservation findById(Integer id) {
+	public Reservation getById(Integer id) {
 		return reservationDao.findOne(id);
 	}
 
@@ -45,8 +45,14 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(Integer id) {
-		reservationDao.delete(id);
+	public int delete(Integer id) {
+		int result = 1;
+		try {
+			reservationDao.delete(id);
+		} catch (Exception e) {
+			result = 0;
+		}
+		return result;
 	}
 
 	public Page<Reservation> findBySportTpyeName(final String sportTypeName,
