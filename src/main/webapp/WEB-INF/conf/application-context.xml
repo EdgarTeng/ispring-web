@@ -11,13 +11,22 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<!-- Grab the app mode from JVM argument -->
-	<bean id="appMode" class="java.lang.String">
-		<!-- <constructor-arg value="${app.mode}" /> -->
+	<!-- <bean id="appMode" class="java.lang.String">
+		<constructor-arg value="${app.mode}" />
 		<constructor-arg value="dev" />
-	</bean>
+	</bean> -->
 	<bean id="lang" class="java.lang.String">
 		<constructor-arg value="EN" />
 	</bean>
+
+	<!-- 使用国际化消息 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="props.i18n.messages" />
+	</bean>
+	<!-- 获取本地区的语言消息 -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
 
 	<!-- Get an instance of Settings class with default/mode properties injected 
 		** Properties defined in mode specific properties files (e.g. dev, prod) 
@@ -36,12 +45,8 @@
 						</bean>
 						<bean
 							class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-							<property name="location" value="classpath:/props/#{appMode}.properties" />
-						</bean>
-						<bean
-							class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 							<property name="location"
-								value="classpath:/props/I18n/message_#{lang}.properties" />
+								value="classpath:/props/i18n/message_EN.properties" />
 						</bean>
 					</list>
 				</property>

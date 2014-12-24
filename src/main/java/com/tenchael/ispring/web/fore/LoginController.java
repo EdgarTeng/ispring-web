@@ -4,12 +4,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import nl.captcha.Captcha;
 import nl.captcha.backgrounds.TransparentBackgroundProducer;
@@ -29,7 +30,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tenchael.ispring.common.ValidatorUtil;
+import com.tenchael.ispring.domain.Role;
 import com.tenchael.ispring.domain.User;
+import com.tenchael.ispring.model.UserInfo;
+import com.tenchael.ispring.service.RoleService;
 import com.tenchael.ispring.service.UserService;
 
 @Controller
@@ -40,6 +44,8 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleService roleService;
 
 	@RequestMapping(value = { "/login", "/ulogin" })
 	public String login() {
@@ -74,7 +80,17 @@ public class LoginController {
 		userEntity.setUserName(userName);
 
 		try {
-			this.userService.save(userEntity);
+			User newUser = this.userService.save(userEntity);
+
+			// 设置用户角色
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(newUser.getId());
+			List<Short> roles = new ArrayList<Short>();
+			Short roleId = 2;// 2为普通用户
+			roles.add(roleId);
+			userInfo.setRoles(roles);
+			userService.saveUserRole(userInfo);
+
 		} catch (Exception e) {
 			resultStatus = false;
 		}
