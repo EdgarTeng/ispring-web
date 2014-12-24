@@ -28,10 +28,10 @@ public class User implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "userName", unique = true)
+	@Column(name = "username", unique = true)
 	private String userName;
 
-	@Column(name = "passWord")
+	@Column(name = "password")
 	private String passWord;
 
 	@Column(name = "createTime")

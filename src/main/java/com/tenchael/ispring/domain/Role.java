@@ -39,8 +39,7 @@ public class Role implements Serializable {
 	@Column(name = "status")
 	private Short status;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE })
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,CascadeType.MERGE })
 	@JoinTable(name = "t_role_menu", joinColumns = { @JoinColumn(name = "roleId") }, inverseJoinColumns = { @JoinColumn(name = "menuId") })
 	private Set<Menu> menus;
 

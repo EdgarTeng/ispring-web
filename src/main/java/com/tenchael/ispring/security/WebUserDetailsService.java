@@ -65,17 +65,17 @@ public class WebUserDetailsService implements UserDetailsService {
 			// 这里的 role 参数为自己定义的，要和 SecurityMetadataSource 中的 SecurityConfig
 			// 参数对应
 			SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
-					"ROLE_" + userRole.getId());
+					"ROLE_" + userRole.getRoleName());
 
 			authorities.add(authority);
 		}
 
 		// 我这里是把超级用户名写死的，您也可以把它实现可配置化
 		// 如果是超级用户，则添加超级用户的授权
-		if (username.equals("admin")) {
-			// ROLE_SUPER 这个权限名字也是自己定义的
-			authorities.add(new SimpleGrantedAuthority("ROLE_SUPER"));
-		}
+		/*
+		 * if (username.equals("admin")) { // ROLE_SUPER 这个权限名字也是自己定义的
+		 * authorities.add(new SimpleGrantedAuthority("ROLE_SUPER")); }
+		 */
 
 		// 创建 UserDetails 对象
 		WebUserDetails webUserDetails = new WebUserDetails(userId, username,

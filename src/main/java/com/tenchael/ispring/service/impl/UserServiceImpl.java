@@ -115,8 +115,7 @@ public class UserServiceImpl implements UserService {
 
 			public Predicate toPredicate(Root<User> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
-				String qName = userName.trim() + "%";
-				return cb.like(root.<String> get("userName"), qName);
+				return cb.equal(root.<String> get("userName"), userName);
 			}
 		};
 		return userDao.findAll(spec, pageable);
